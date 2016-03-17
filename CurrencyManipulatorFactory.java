@@ -21,12 +21,6 @@ public final class CurrencyManipulatorFactory
         return listCM.get(currencyCode);
     }
 
-    /*
-    сли вопрос по моему вверхнему вопросу, то ответ:
-Да, он должен возвращать Collection и быть дженериком.
-Есть ещё хороший метод values()(Это подсказка).
-     */
-
     //public static Map<String, CurrencyManipulator> getAllCurrencyManipulators()
     public static Collection<CurrencyManipulator> getAllCurrencyManipulators()
     {
