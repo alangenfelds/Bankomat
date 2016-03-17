@@ -68,29 +68,15 @@ public class CurrencyManipulator
 
         for (Integer i : sortedMap.descendingKeySet()) //from max to min
         {
-            System.out.println("Starting withdrawAmount. expectedAmount="+expectedAmount);
             int denomination = i;
-            System.out.println("current denomination="+denomination);
             if (denomination <= expectedAmount)
             {
                 int count = expectedAmount / denomination;  // vichislaem skolko kupjur tekusego nominala potrebuetsa
-
-//                        //!!!! net nikakoj proverki na dostupnoe kol-vo banknot  - poprobovatj while (count>denominations.get(i) !!!!
-//                if (count>denominations.get(i))
-//                {
-//                    System.out.println("Ne dostatochno kupjur dannogo nominala");
-//                    System.out.println("count="+count);
-//                    continue;
-//                }
-
                 while (count>denominations.get(i))
                 {
                     count--;
                 }
-
-                System.out.println("count=expectedAmount / denomination="+count);
                 expectedAmount =expectedAmount - denomination * count;  // otnimaem iz trebuemoj summi nominal*count
-                System.out.println("expectedAmount - denomination * count="+expectedAmount);
                 resultMap.put(denomination, count); //dobavlaem polucennuju kombinaciju v resultat
                 if (expectedAmount == 0) // esli trebuemaja summa=0 t.e. dostignuta, to zakanchivaem
                 {
@@ -113,8 +99,7 @@ public class CurrencyManipulator
             Integer value = entry.getValue();
             if (resultMap.containsKey(key)) //esli nominal estj v resultMap'e
             {
-               // if (value - resultMap.get(key) != 0) //esli (kol-vo tekushih kupjur - kol-vo kupjur v resulte)!=0
-                if (resultMap.get(key)!=0)
+               if (value - resultMap.get(key) != 0) //esli (kol-vo tekushih kupjur - kol-vo kupjur v resulte)!=0
                     map.put(key, value - resultMap.get(key));  // to v map otnimaem iz kolva kupjur - kolvo vidannih kupjur
             }
             else  // a esli takoj nominal ne vidavali, to prosto zapisivaem v map takoe ze kol-vo kupjur kak i bilo iznacaljno v denominations

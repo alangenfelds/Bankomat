@@ -1,5 +1,6 @@
 package com.javarush.test.level26.lesson15.big01.command;
 
+import com.javarush.test.level26.lesson15.big01.CashMachine;
 import com.javarush.test.level26.lesson15.big01.ConsoleHelper;
 import com.javarush.test.level26.lesson15.big01.CurrencyManipulator;
 import com.javarush.test.level26.lesson15.big01.CurrencyManipulatorFactory;
@@ -7,19 +8,22 @@ import com.javarush.test.level26.lesson15.big01.exception.InterruptOperationExce
 import com.javarush.test.level26.lesson15.big01.exception.NotEnoughMoneyException;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 class WithdrawCommand implements Command
 {
+    private static ResourceBundle res = ResourceBundle.getBundle(CashMachine.RESOURCE_PATH+"withdraw_en");
     @Override
     public void execute() throws InterruptOperationException
     {
+        ConsoleHelper.writeMessage(res.getString("before"));
         String currencyCode = ConsoleHelper.askCurrencyCode();
         CurrencyManipulator currencyManipulator = CurrencyManipulatorFactory.getManipulatorByCurrencyCode(currencyCode);
         int sum;
 
         while (true)
         {
-            ConsoleHelper.writeMessage("Enter withdraw amount");
+            ConsoleHelper.writeMessage(res.getString("specify.amount"));
             String s = ConsoleHelper.readString();
             try
             {
@@ -27,17 +31,17 @@ class WithdrawCommand implements Command
             }
             catch (NumberFormatException e)
             {
-                ConsoleHelper.writeMessage("Enter correct amount");
+                ConsoleHelper.writeMessage(res.getString("specify.not.empty.amount"));
                 continue;
             }
             if (sum <= 0)
             {
-                ConsoleHelper.writeMessage("Enter positive amount");
+                ConsoleHelper.writeMessage(res.getString("specify.not.empty.amount"));
                 continue;
             }
             if (!currencyManipulator.isAmountAvailable(sum))
             {
-                ConsoleHelper.writeMessage("Not enough money");
+                ConsoleHelper.writeMessage(res.getString("not.enough.money"));
                 continue;
             }
             try
@@ -46,11 +50,13 @@ class WithdrawCommand implements Command
                 //success
                 for (Map.Entry<Integer, Integer> entry : result.entrySet())
                     ConsoleHelper.writeMessage("\t" + entry.getKey() + " - " + entry.getValue());
-                ConsoleHelper.writeMessage("Transaction has completed successfully");
+                ConsoleHelper.writeMessage(String.format(res.getString("success.format"),sum,currencyCode));
+                //success.format=%d %s was withdrawn successfully
+
             }
             catch (NotEnoughMoneyException e)
             {
-                ConsoleHelper.writeMessage("Cannot withdraw current sum");
+                ConsoleHelper.writeMessage(res.getString("exact.amount.not.available"));
                 continue;
             }
             break;

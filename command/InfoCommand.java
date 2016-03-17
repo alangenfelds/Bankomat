@@ -1,9 +1,12 @@
 package com.javarush.test.level26.lesson15.big01.command;
 
+import com.javarush.test.level26.lesson15.big01.CashMachine;
+import com.javarush.test.level26.lesson15.big01.ConsoleHelper;
 import com.javarush.test.level26.lesson15.big01.CurrencyManipulator;
 import com.javarush.test.level26.lesson15.big01.CurrencyManipulatorFactory;
 
 import java.util.Collection;
+import java.util.ResourceBundle;
 
 
 /**
@@ -11,11 +14,13 @@ import java.util.Collection;
  */
 class InfoCommand implements Command
 {
+    private ResourceBundle res = ResourceBundle.getBundle(CashMachine.RESOURCE_PATH+"info_en");
     @Override
     public void execute()
     {
+        ConsoleHelper.writeMessage(res.getString("before"));
         Collection<CurrencyManipulator> collCM = CurrencyManipulatorFactory.getAllCurrencyManipulators();
-        if (collCM.isEmpty()) System.out.println("No money available.");
+        if (collCM.isEmpty()) ConsoleHelper.writeMessage(res.getString("no.money"));
         else
         {
             int count=0;
@@ -23,10 +28,10 @@ class InfoCommand implements Command
             {
                 if (cm.hasMoney() && cm.getTotalAmount()>0)
                 {
-                    System.out.println(cm.getCurrencyCode() + " - " + cm.getTotalAmount());
+                    ConsoleHelper.writeMessage(cm.getCurrencyCode() + " - " + cm.getTotalAmount());
                     count++;
                 }
-                if (count==0) System.out.println("No money available.");
+                if (count==0) ConsoleHelper.writeMessage(res.getString("no.money"));
             }
         }
     }

@@ -18,6 +18,7 @@ public final class CommandExecutor{
         mapCE.put(Operation.INFO, new InfoCommand());
         mapCE.put(Operation.WITHDRAW, new WithdrawCommand());
         mapCE.put(Operation.EXIT, new ExitCommand());
+        mapCE.put(Operation.LOGIN,new LoginCommand());
     }
     public static final void execute (Operation operation) throws InterruptOperationException
     {
